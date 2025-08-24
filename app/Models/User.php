@@ -33,6 +33,7 @@ class User extends Authenticatable
         'zipcode',
         'status',
         'fcm_token',
+        'api_token',
         'latitude',
         'longitude'
     ];
@@ -115,5 +116,4 @@ class User extends Authenticatable
     //     }
     // }
 
-    
 }

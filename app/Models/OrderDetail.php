@@ -11,18 +11,14 @@ class OrderDetail extends Model
     protected $fillable = [
         'order_id',
         'user_id',
-        'store_id',
         'product_id',
         'price',
-        'sku',
         'quantity',
-        'delivery_fees',
         'order_status'
         ];
     protected $casts = [
           'price' => 'float',
           'quantity'=>'integer',
-          'store_id'=>'integer',
           'product_id'=>'integer',
           'user_id'=>'integer',
           'order_id'=>'integer'

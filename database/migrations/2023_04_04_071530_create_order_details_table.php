@@ -20,7 +20,6 @@ class CreateOrderDetailsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->string('price')->nullable();
             $table->string('quantity')->nullable();
-            $table->string('delivery_fees')->comment('Packaging Costs + Shipping Costs + Handling Costs')->nullable();
             $table->string('order_status')->comment('Pending/Completed')->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

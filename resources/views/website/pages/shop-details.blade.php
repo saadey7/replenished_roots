@@ -3,6 +3,37 @@
 Product Detail
 @endsection
 @section('content')
+<style>
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    /* So first star is leftmost */
+    justify-content: flex-start;
+}
+
+.star-rating input {
+    display: none;
+    /* hide the radio buttons */
+}
+
+.star-rating label {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* When star is checked OR stars before it */
+.star-rating input:checked~label {
+    color: gold;
+}
+
+/* Hover effect */
+.star-rating label:hover,
+.star-rating label:hover~label {
+    color: gold;
+}
+</style>
 <main class="main-area fix">
 
     <!-- breadcrumb-area -->
@@ -118,15 +149,31 @@ Product Detail
                         </div>
                         <div class="inner-shop-perched-info">
                             <div class="sd-cart-wrap">
-                                <form action="#">
+                                <form id="addToCart-form{{$data->id}}" action="{{url('/add_to_cart')}}" method="POST"
+                                    class="">
+                                    @csrf
                                     <div class="quickview-cart-plus-minus">
-                                        <input type="text" value="1">
+                                        <input type="text" name="quantity" value="1">
+                                        <input type="hidden" name="product_id" value="{{$data->id}}">
                                     </div>
                                 </form>
                             </div>
-                            <a href="cart.html" class="cart-btn">add to cart</a>
-                            <a href="shop-details.html" class="wishlist-btn" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Wishlist"><i class="far fa-heart"></i></a>
+                            <a href="{{url('/add_to_cart')}}" class="cart-btn"
+                                onclick="event.preventDefault();
+                                                        document.getElementById('addToCart-form{{$data->id}}').submit();">add to cart</a>
+                            <a href="{{url('/add_to_wishlist')}}" class="wishlist-btn"
+                                onclick="event.preventDefault(); document.getElementById('addToWishlist-form{{$data->id}}').submit();">
+                                @if ($data->is_fav)
+                                <i class="fas fa-heart"></i>
+                                @else
+                                <i class="far fa-heart"></i>
+                                @endif
+                            </a>
+                            <form id="addToWishlist-form{{$data->id}}" action="{{url('/add_to_wishlist')}}"
+                                method="post" class="d-none">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{$data->id}}">
+                            </form>
                         </div>
                         <div class="inner-shop-details-bottom">
                             <span>Tag :
@@ -240,40 +287,57 @@ Product Detail
                                     </div>
                                     <div class="add-review">
                                         <h4 class="title">Add a review</h4>
-                                        <form action="#">
-                                            <p>Your email address will not be published.Required fields are marked
+                                        <form action="{{ url('/store-feedback') }}" method="POST">
+                                            @csrf
+                                            <p>Your email address will not be published. Required fields are marked
                                                 <span>*</span>
                                             </p>
+
                                             <div class="from-grp">
                                                 <label for="name">Your name <span>*</span></label>
-                                                <input type="text" id="name">
+                                                <input type="text" id="name" name="name"
+                                                    value="{{Auth::guard('web')->user()->firstname}} {{Auth::guard('web')->user()->lastname}}"
+                                                    required>
                                             </div>
+
                                             <div class="from-grp">
                                                 <label for="email">Your email <span>*</span></label>
-                                                <input type="text" id="email">
+                                                <input type="email" id="email" name="email"
+                                                    value="{{Auth::guard('web')->user()->email}}" required>
+                                                <input type="hidden" name="product_id" value="{{$data->id}}">
                                             </div>
+
                                             <div class="from-grp checkbox-grp">
-                                                <input type="checkbox" id="checkbox">
+                                                <input type="checkbox" id="checkbox" name="hide_email">
                                                 <label for="checkbox">Don’t show your email address</label>
                                             </div>
+
+
                                             <div class="form-rating">
-                                                <label>your rating</label>
-                                                <ul class="list-wrap">
-                                                    <li>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                    </li>
-                                                </ul>
+                                                <label>Your rating</label>
+                                                <div class="star-rating">
+                                                    <input type="radio" id="star5" name="rating" value="5"><label
+                                                        for="star5">★</label>
+                                                    <input type="radio" id="star4" name="rating" value="4"><label
+                                                        for="star4">★</label>
+                                                    <input type="radio" id="star3" name="rating" value="3"><label
+                                                        for="star3">★</label>
+                                                    <input type="radio" id="star2" name="rating" value="2"><label
+                                                        for="star2">★</label>
+                                                    <input type="radio" id="star1" name="rating" value="1"><label
+                                                        for="star1">★</label>
+                                                </div>
                                             </div>
+
                                             <div class="from-grp">
                                                 <label for="comment">Write Your review <span>*</span></label>
-                                                <textarea id="comment" cols="30" rows="10"></textarea>
+                                                <textarea id="comment" name="review" cols="30" rows="5"
+                                                    required></textarea>
                                             </div>
-                                            <button class="btn">Submit Now</button>
+
+                                            <button class="btn" type="submit">Submit Now</button>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -291,143 +355,60 @@ Product Detail
             <div class="related-products-wrap">
                 <h2 class="title">Related Products</h2>
                 <div class="row related-product-active">
+                    @foreach ($relatedProducts->take(5) as $item)
                     <div class="col-xl-3">
                         <div class="home-shop-item">
                             <div class="home-shop-thumb">
                                 <a href="shop-details.html">
-                                    <img src="{{asset('public/website/assets/img/products/home_shop_thumb01.png')}}"
-                                        alt="img">
-                                    <span class="discount"> -15%</span>
+                                    <img src="{{$item->images[0]->image}}" alt="img">
+                                    @if ($item->is_discount)
+                                    <span class="discount"> -{{$item->discount}}%</span>
+                                    @endif
+
                                 </a>
                                 <div class="shop-thumb-shape"></div>
                             </div>
                             <div class="home-shop-content">
-                                <h4 class="title"><a href="shop-details.html">Box Full of Muscles</a></h4>
-                                <span class="home-shop-price">$85.99</span>
+                                <h4 class="title">
+                                    <a href="{{url('product-detail')}}/{{$item->product_id}}"
+                                        style="display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">{{$item->name}}</a>
+                                </h4>
+
+                                @if ($item->is_discount == 1)
+                                <span class="home-shop-price">${{$item->discount_price}} <span class="old-price"
+                                        style="font-size:17px; color:#faa432;"><del>${{$item->price}}</del></span></span>
+                                @else
+                                <span class="home-shop-price">${{$item->price}}</span>
+                                @endif
                                 <div class="home-shop-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="total-rating">(30)</span>
+                                    @for ($i = 1; $i <= 5; $i++) @if ($i <=floor($item->reviews->avg('rating')))
+                                        <i class="fas fa-star"></i>
+                                        @elseif ($i - 0.5 <= $item->reviews->avg('rating'))
+                                            <i class="fas fa-star-half-alt"></i>
+                                            @else
+                                            <i class="far fa-star"></i>
+                                            @endif
+                                            @endfor
+                                            <span class="total-rating">({{$item->reviews->count()}})</span>
                                 </div>
                                 <div class="shop-content-bottom">
-                                    <a href="cart.html" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
-                                    <a href="shop-details.html" class="btn btn-two">Buy Now</a>
+                                    <a href="{{url('/add_to_cart')}}" class="cart"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('addToCart-form{{$item->id}}').submit();"><i
+                                            class="flaticon-shopping-cart-1"></i></a>
+                                    <form id="addToCart-form{{$item->id}}" action="{{url('/add_to_cart')}}"
+                                        method="POST" class="d-none">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{$item->id}}">
+                                        <input type="hidden" name="quantity" value="1">
+                                    </form>
+                                    <a href="{{url('product-detail')}}/{{$item->product_id}}" class="btn btn-two">Buy
+                                        Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3">
-                        <div class="home-shop-item">
-                            <div class="home-shop-thumb">
-                                <a href="shop-details.html">
-                                    <img src="{{asset('public/website/assets/img/products/home_shop_thumb02.png')}}"
-                                        alt="img">
-                                </a>
-                                <div class="shop-thumb-shape yellow"></div>
-                            </div>
-                            <div class="home-shop-content">
-                                <h4 class="title"><a href="shop-details.html">Protein Powder 2kg</a></h4>
-                                <span class="home-shop-price">$55.99</span>
-                                <div class="home-shop-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="total-rating">(30)</span>
-                                </div>
-                                <div class="shop-content-bottom">
-                                    <a href="cart.html" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
-                                    <a href="shop-details.html" class="btn btn-two">Buy Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="home-shop-item">
-                            <div class="home-shop-thumb">
-                                <a href="shop-details.html">
-                                    <img src="{{asset('public/website/assets/img/products/home_shop_thumb03.png')}}"
-                                        alt="img">
-                                    <span class="discount"> -15%</span>
-                                </a>
-                                <div class="shop-thumb-shape purple"></div>
-                            </div>
-                            <div class="home-shop-content">
-                                <h4 class="title"><a href="shop-details.html">Amino Energy Health 2kg</a></h4>
-                                <span class="home-shop-price">$79.99</span>
-                                <div class="home-shop-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="total-rating">(24)</span>
-                                </div>
-                                <div class="shop-content-bottom">
-                                    <a href="cart.html" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
-                                    <a href="shop-details.html" class="btn btn-two">Buy Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="home-shop-item">
-                            <div class="home-shop-thumb">
-                                <a href="shop-details.html">
-                                    <img src="{{asset('public/website/assets/img/products/home_shop_thumb04.png')}}"
-                                        alt="img">
-                                </a>
-                                <div class="shop-thumb-shape gray"></div>
-                            </div>
-                            <div class="home-shop-content">
-                                <h4 class="title"><a href="shop-details.html">Antiaging and Longevity</a></h4>
-                                <span class="home-shop-price">$79.99</span>
-                                <div class="home-shop-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="total-rating">(24)</span>
-                                </div>
-                                <div class="shop-content-bottom">
-                                    <a href="cart.html" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
-                                    <a href="shop-details.html" class="btn btn-two">Buy Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="home-shop-item">
-                            <div class="home-shop-thumb">
-                                <a href="shop-details.html">
-                                    <img src="{{asset('public/website/assets/img/products/home_shop_thumb05.png')}}"
-                                        alt="img">
-                                </a>
-                                <div class="shop-thumb-shape blue"></div>
-                            </div>
-                            <div class="home-shop-content">
-                                <h4 class="title"><a href="shop-details.html">SERIOUR MASS 2kg</a></h4>
-                                <span class="home-shop-price">$39.99</span>
-                                <div class="home-shop-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="total-rating">(12)</span>
-                                </div>
-                                <div class="shop-content-bottom">
-                                    <a href="cart.html" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
-                                    <a href="shop-details.html" class="btn btn-two">Buy Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

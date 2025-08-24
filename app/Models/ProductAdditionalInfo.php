@@ -17,4 +17,8 @@ class ProductAdditionalInfo extends Model
     protected $casta  = [
         'product_id' => 'integer',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id');
+    }
 }

@@ -3,10 +3,11 @@
 All Orders
 @endsection
 <style>
-    .orderDetail .container {
+.orderDetail .container {
     margin-top: 50px;
     margin-bottom: 50px;
 }
+
 .orderDetail .card {
     position: relative;
     display: -webkit-box;
@@ -23,15 +24,18 @@ All Orders
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0.1rem;
 }
+
 .orderDetail .card-header:first-child {
     border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0;
 }
+
 .orderDetail .card-header {
     padding: 0.75rem 1.25rem;
     margin-bottom: 0;
     background-color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .orderDetail .track {
     position: relative;
     background-color: #ddd;
@@ -42,6 +46,7 @@ All Orders
     margin-bottom: 60px;
     margin-top: 50px;
 }
+
 .orderDetail .track .step {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
@@ -51,9 +56,11 @@ All Orders
     text-align: center;
     position: relative;
 }
+
 .orderDetail .track .step.active:before {
     background: #ff5722;
 }
+
 .orderDetail .track .step::before {
     height: 7px;
     position: absolute;
@@ -62,10 +69,12 @@ All Orders
     left: 0;
     top: 18px;
 }
+
 .orderDetail .track .step.active .icon {
     background: #ee5435;
     color: #fff;
 }
+
 .orderDetail .track .icon {
     display: inline-block;
     width: 40px;
@@ -75,6 +84,7 @@ All Orders
     border-radius: 100%;
     background: #ddd;
 }
+
 .orderDetail .track .step.active .text {
     font-weight: 400;
     color: #000;
@@ -84,11 +94,13 @@ All Orders
     display: block;
     margin-top: 7px;
 }
+
 .orderDetail .track .icon .zmdi {
     font-size: 21px;
     margin-top: 10px;
     margin-left: 1px;
 }
+
 .orderDetail .itemside {
     position: relative;
     display: -webkit-box;
@@ -96,47 +108,54 @@ All Orders
     display: flex;
     width: 100%;
 }
+
 .orderDetail .itemside .aside {
     position: relative;
     -ms-flex-negative: 0;
     flex-shrink: 0;
 }
+
 .orderDetail .img-sm {
     width: 80px;
     height: 80px;
     padding: 7px;
 }
+
 .orderDetail ul.row,
 .orderDetail ul.row-sm {
     list-style: none;
     padding: 0;
 }
+
 .orderDetail .itemside .info {
     padding-left: 15px;
     padding-right: 7px;
 }
+
 .orderDetail .itemside .title {
     display: block;
     margin-bottom: 5px;
     color: #212529;
 }
+
 .orderDetail p {
     margin-top: 0;
     margin-bottom: 1rem;
 }
+
 .orderDetail .btn-warning {
     color: #ffffff;
     background-color: #ee5435;
     border-color: #ee5435;
     border-radius: 1px;
 }
+
 .orderDetail .btn-warning:hover {
     color: #ffffff;
     background-color: #ff2b00;
     border-color: #ff2b00;
     border-radius: 1px;
 }
-
 </style>
 @section('content')
 <!-- Main Content -->
@@ -180,7 +199,7 @@ All Orders
                                             <td style="vertical-align: middle;">{{$order->order_id}}</td>
                                             <td style="vertical-align: middle;">{{$order->receiver_name}}</td>
                                             <td style="vertical-align: middle;">{{$order->receiver_address}}</a></td>
-                                            <td style="vertical-align: middle;">${{$order->totalAmount}}</td>
+                                            <td style="vertical-align: middle;">${{$order->amount}}</td>
                                             <td style="vertical-align: middle;">
                                                 @if($order->order_status == 'Placed')
                                                 <span class="badge badge-warning">{{$order->order_status}}</span>
@@ -197,138 +216,205 @@ All Orders
                                                 @endif
                                             </td>
                                             <td style="vertical-align: middle;">
-                                                <button type="button" class="btn btn-primary align-end" data-toggle="modal" data-target="#viewDetail{{$order->id}}">
-                                                  <i class="zmdi zmdi-eye"></i>
+                                                <button type="button" class="btn btn-primary align-end"
+                                                    data-toggle="modal" data-target="#viewDetail{{$order->id}}">
+                                                    <i class="zmdi zmdi-eye"></i>
                                                 </button>
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="viewDetail{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog modal-xl" role="document">
-                                                    <div class="modal-content">
-                                                      <!--<div class="modal-header">-->
-                                                      <!--  <h5 class="modal-title" id="exampleModalLabel">Order Detail</h5>-->
-                                                      <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                                                      <!--    <span aria-hidden="true">&times;</span>-->
-                                                      <!--  </button>-->
-                                                      <!--</div>-->
-                                                      <div class="modal-body orderDetail">
-                                                          
-                                                          <div class="container">
-                                                            <article class="card">
-                                                                <header class="card-header"> Order Detail </header>
-                                                                <div class="card-body">
-                                                                    <h6>Order ID: {{$order->order_id}}</h6>
+                                                <div class="modal fade" id="viewDetail{{$order->id}}" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalLabel"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-xl" role="document">
+                                                        <div class="modal-content">
+                                                            <!--<div class="modal-header">-->
+                                                            <!--  <h5 class="modal-title" id="exampleModalLabel">Order Detail</h5>-->
+                                                            <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                                                            <!--    <span aria-hidden="true">&times;</span>-->
+                                                            <!--  </button>-->
+                                                            <!--</div>-->
+                                                            <div class="modal-body orderDetail">
+
+                                                                <div class="container">
                                                                     <article class="card">
-                                                                        <header class="card-header"> Schedule For Delivery </header>
-                                                                        <div class="card-body row">
-                                                                            <div class="col-md-3"> <strong>Delivery From:</strong> <br> {{$order->time_from}} </div>
-                                                                            <div class="col-md-3"> <strong>Delivery To:</strong> <br>  {{$order->time_to}} </div>
-                                                                            <div class="col-md-3"> <strong>Status:</strong> <br> {{$order->order_status}} </div>
-                                                                            <div class="col-md-3"> <strong>Payment Type:</strong> <br> {{$order->payment}} </div>
-                                                                            <div class="col-md-12"> <strong>Notes:</strong> <br> {{$order->comment}} </div>
+                                                                        <header class="card-header"> Order Detail
+                                                                        </header>
+                                                                        <div class="card-body">
+                                                                            <h6>Order ID: {{$order->order_id}}</h6>
+                                                                            <article class="card">
+                                                                                <header class="card-header"> Delivery
+                                                                                    Details </header>
+                                                                                <div class="card-body row">
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Receiver Name:</strong>
+                                                                                        <br> {{$order->receiver_name}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Receiver Email:</strong>
+                                                                                        <br> {{$order->receiver_email}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Receiver Phone
+                                                                                            No:</strong> <br>
+                                                                                        {{$order->receiver_phoneNo}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Order Date:</strong>
+                                                                                        <br>
+                                                                                        {{date('d M, Y', strtotime($order->order_date))}}
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <strong>Delivery
+                                                                                            Address:</strong>
+                                                                                        <br>
+                                                                                        {{$order->receiver_address}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>City:</strong>
+                                                                                        <br>
+                                                                                        {{$order->receiver_city}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>District:</strong>
+                                                                                        <br>
+                                                                                        {{$order->receiver_district}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Country:</strong>
+                                                                                        <br>
+                                                                                        {{$order->receiver_country}}
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <strong>Zip Code:</strong>
+                                                                                        <br>
+                                                                                        {{$order->receiver_zipCode}}
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <strong>Notes:</strong> <br>
+                                                                                        {{$order->comment}}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </article>
+                                                                            @if($order->order_status == 'Cancelled')
+                                                                            <h5 style="text-align: center; color: red;">
+                                                                                Order Cancelled</h5>
+                                                                            @else
+                                                                            <div class="track">
+                                                                                <div
+                                                                                    class="step @if($order->order_status == 'Placed' || $order->order_status == 'Prepared' || $order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif">
+                                                                                    <span class="icon"> <i
+                                                                                            class="zmdi zmdi-check"></i>
+                                                                                    </span> <span class="text">Order
+                                                                                        Placed</span>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="step @if($order->order_status == 'Prepared' || $order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif">
+                                                                                    <span class="icon"> <i
+                                                                                            class="zmdi zmdi-shopping-cart-plus"></i>
+                                                                                    </span> <span class="text">Order
+                                                                                        Prepared</span>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="step @if($order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif">
+                                                                                    <span class="icon"> <i
+                                                                                            class="zmdi zmdi-account"></i>
+                                                                                    </span> <span class="text"> Order
+                                                                                        Dispatched</span>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="step @if($order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif">
+                                                                                    <span class="icon"> <i
+                                                                                            class="zmdi zmdi-truck"></i>
+                                                                                    </span> <span class="text"> Order
+                                                                                        Delivered </span>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="step @if($order->order_status == 'Completed') active @endif">
+                                                                                    <span class="icon"> <i
+                                                                                            class="zmdi zmdi-check-all"></i>
+                                                                                    </span> <span class="text">Order
+                                                                                        Completed</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            @endif
+                                                                            <hr>
+                                                                            <ul class="row">
+                                                                                @foreach($order->orderdetail as
+                                                                                $orderDetail)
+                                                                                <li class="col-md-4">
+                                                                                    <figure class="itemside mb-3">
+                                                                                        <div class="aside"><img
+                                                                                                src="{{$orderDetail->product->images[0]->image}}"
+                                                                                                class="img-sm border">
+                                                                                        </div>
+                                                                                        <figcaption
+                                                                                            class="info align-self-center">
+                                                                                            <p class="title">
+                                                                                                {{$orderDetail->product->name}}
+                                                                                                <br> Qty:
+                                                                                                {{$orderDetail->quantity}}
+                                                                                            </p> <span
+                                                                                                class="text-muted">$
+                                                                                                {{$orderDetail->price}}
+                                                                                            </span>
+                                                                                        </figcaption>
+                                                                                    </figure>
+                                                                                </li>
+                                                                                @endforeach
+                                                                            </ul>
+                                                                            <hr>
+                                                                            @php
+                                                                            $getItemTotal =
+                                                                            $order->orderdetail->sum(function($item) {
+                                                                            return $item->price * $item->quantity;
+                                                                            });
+                                                                            @endphp
+                                                                            <div class="row justify-content-end">
+                                                                                <div class="col-md-3">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-6">
+                                                                                            <p class="title">Item
+                                                                                                Total:</p>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <span
+                                                                                                class="text-muted">${{$getItemTotal}}</span>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <p class="title">Total
+                                                                                                Price:</p>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <span
+                                                                                                class="text-muted">${{$order->amount}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </article>
-                                                                    @if($order->order_status == 'Cancelled')
-                                                                        <h5 style="text-align: center; color: red;">Order Cancelled</h5>
-                                                                    @else
-                                                                        <div class="track">
-                                                                            <div class="step @if($order->order_status == 'Placed' || $order->order_status == 'Prepared' || $order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif"> <span class="icon"> <i class="zmdi zmdi-check"></i> </span> <span class="text">Order Placed</span> </div>
-                                                                            <div class="step @if($order->order_status == 'Prepared' || $order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif"> <span class="icon"> <i class="zmdi zmdi-shopping-cart-plus"></i> </span> <span class="text">Order Prepared</span> </div>
-                                                                            <div class="step @if($order->order_status == 'Dispatched' || $order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif"> <span class="icon"> <i class="zmdi zmdi-account"></i> </span> <span class="text"> Order Dispatched</span> </div>
-                                                                            <div class="step @if($order->order_status == 'Delivered' || $order->order_status == 'Completed') active @endif"> <span class="icon"> <i class="zmdi zmdi-truck"></i> </span> <span class="text"> Order Delivered </span> </div>
-                                                                            <div class="step @if($order->order_status == 'Completed') active @endif"> <span class="icon"> <i class="zmdi zmdi-check-all"></i> </span> <span class="text">Order Completed</span> </div>
-                                                                        </div>
-                                                                    @endif
-                                                                    <hr>
-                                                                    <ul class="row">
-                                                                        @foreach($order->orderdetail as $orderDetail)
-                                                                        <li class="col-md-4">
-                                                                            <figure class="itemside mb-3">
-                                                                                <div class="aside"><img src="{{$orderDetail->product->images[0]->image}}" class="img-sm border"></div>
-                                                                                <figcaption class="info align-self-center">
-                                                                                    <p class="title">{{$orderDetail->product->name}} <br> Qty: {{$orderDetail->quantity}}</p> <span class="text-muted">$ {{$orderDetail->price}} </span>
-                                                                                </figcaption>
-                                                                            </figure>
-                                                                        </li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                    
-                                                                    <hr>
-                                                                    <div class="row">
-                                                                        <div class="col-md-3" >
-                                                                            <div class="row">
-                                                                                <div class="col-md-6">
-                                                                                    <p class="title">Item Total:</p>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <span class="text-muted">${{$order->amount}}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-3" >
-                                                                            <div class="row">
-                                                                                <div class="col-md-7">
-                                                                                    <p class="title">Sale Tax (13%):</p>
-                                                                                </div>
-                                                                                <div class="col-md-5">
-                                                                                    <span class="text-muted">${{$order->sales_tax}}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-3" >
-                                                                            <div class="row">
-                                                                                <div class="col-md-7">
-                                                                                    <p class="title">Delivery Fees:</p>
-                                                                                </div>
-                                                                                <div class="col-md-5">
-                                                                                    <span class="text-muted">${{$order->all_delivery_fees}}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-3" >
-                                                                            <div class="row">
-                                                                                <div class="col-md-6">
-                                                                                    <p class="title">Tip:</p>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <span class="text-muted">$@if($order->tip) {{$order->tip}} @else 0 @endif</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    
-                                                                    <hr>
-                                                                    <div class="row justify-content-end">
-                                                                        <div class="col-md-3" >
-                                                                            <div class="row">
-                                                                                <div class="col-md-6">
-                                                                                    <p class="title">Total Price:</p>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <span class="text-muted">${{$order->totalAmount}}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
-                                                            </article>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Close</button>
+                                                            </div>
                                                         </div>
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                      </div>
                                                     </div>
-                                                  </div>
                                                 </div>
                                             </td>
                                             <td style="vertical-align: middle;">
                                                 @if($order->order_status == 'Placed')
-                                                <a href="{{url('admin/prepared_order')}}/{{$order->id}}" class="btn btn-primary">Prepared</a>
+                                                <a href="{{url('admin/prepared_order')}}/{{$order->id}}"
+                                                    class="btn btn-primary">Prepared</a>
                                                 @elseif($order->order_status == 'Prepared')
-                                                <a href="{{url('admin/dispatch_order')}}/{{$order->id}}" class="btn btn-warning">Dispatched</a>
+                                                <a href="{{url('admin/dispatch_order')}}/{{$order->id}}"
+                                                    class="btn btn-warning">Dispatched</a>
                                                 @elseif($order->order_status == 'Dispatched')
-                                                <a href="{{url('admin/deliver_order')}}/{{$order->id}}" class="btn btn-info">Delivered</a>
+                                                <a href="{{url('admin/deliver_order')}}/{{$order->id}}"
+                                                    class="btn btn-info">Delivered</a>
                                                 @elseif($order->order_status == 'Delivered')
-                                                <a href="{{url('admin/complete_order')}}/{{$order->id}}" class="btn btn-success">Completed</a>
+                                                <a href="{{url('admin/complete_order')}}/{{$order->id}}"
+                                                    class="btn btn-success">Completed</a>
                                                 @elseif($order->order_status == 'Completed')
                                                 <button class="btn btn-success" style="cursor: auto;">Completed</button>
                                                 @else

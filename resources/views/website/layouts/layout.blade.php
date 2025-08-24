@@ -24,6 +24,14 @@
         <link rel="stylesheet" href="{{asset('public/website/assets/css/style.css')}}">
         <link rel="stylesheet" href="{{asset('public/website/assets/css/responsive.css')}}">
     </head>
+    @php
+    $user = Auth::guard('web')->user();
+    if($user){
+    $getCarts = App\Models\Cart::where('user_id', $user->id)->with('product')->get();
+    }else{
+    $getCarts = [];
+    }
+    @endphp
 
     <body>
 
@@ -94,8 +102,26 @@
                                                     style="display: flex; gap: 7px; align-items: center;">
                                                     <i class="far fa-user-circle"></i>
                                                     <span
-                                                        style="font-size: 20px;">{{Auth::guard('web')->user()->name}}</span>
+                                                        style="font-size: 20px;">{{Auth::guard('web')->user()->firstname}}
+                                                        {{Auth::guard('web')->user()->lastname}}</span>
                                                 </a>
+                                                <div class="header-mini-cart"
+                                                    style="width: fit-content; padding: 5px 25px; right: 20px; top: 40px">
+                                                    <ul
+                                                        class="woocommerce-mini-cart cart_list product_list_widget list-wrap">
+                                                        <li class="woocommerce-mini-cart-item d-flex align-items-center"
+                                                            style="margin-bottom: 0px;">
+                                                            <a class="" href="{{ url('/logout') }}" onclick="event.preventDefault();
+                                                        document.getElementById('logout-web-form').submit();">
+                                                                <span>Logout</span>
+                                                            </a>
+                                                            <form id="logout-web-form" action="{{ url('/logout') }}"
+                                                                method="POST" class="d-none">
+                                                                @csrf
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                                 @endauth
                                                 @guest
                                                 <a href="{{url('login')}}" class="cart-count"
@@ -105,66 +131,57 @@
                                                 </a>
                                                 @endguest
                                             </li>
-                                            <li class="header-search">
-                                                @auth
-                                                <a href="#" class="cart-count"><i class="flaticon-shopping-cart"></i>
-                                                    <span class="mini-cart-count">2</span>
+                                            @auth
+                                            <li class="header-shop-cart">
+                                                <a href="{{url('/cart')}}" class="cart-count"><i
+                                                        class="flaticon-shopping-cart"></i>
+                                                    <span class="mini-cart-count">{{$getCarts->count()}}</span>
                                                 </a>
+                                                @if ($getCarts->count() > 0)
                                                 <div class="header-mini-cart">
                                                     <ul
                                                         class="woocommerce-mini-cart cart_list product_list_widget list-wrap">
+                                                        @foreach ($getCarts as $item)
                                                         <li
                                                             class="woocommerce-mini-cart-item d-flex align-items-center">
                                                             <a href="#" class="remove remove_from_cart_button">×</a>
                                                             <div class="mini-cart-img">
-                                                                <img src="{{asset('public/website/assets/img/products/cart_p01.jpg')}}"
+                                                                <img src="{{$item->product->images[0]->image}}"
                                                                     alt="Product">
                                                             </div>
                                                             <div class="mini-cart-content">
                                                                 <h4 class="product-title"><a
-                                                                        href="shop-details.html">Antiaging and
-                                                                        Longevity</a>
+                                                                        href="{{url('product-detail')}}/{{$item->product->product_id}}">{{$item->product->name}}</a>
                                                                 </h4>
-                                                                <div class="mini-cart-price">1 ×
+                                                                <div class="mini-cart-price">{{$item->quantity}} ×
                                                                     <span
-                                                                        class="woocommerce-Price-amount amount">$49</span>
+                                                                        class="woocommerce-Price-amount amount">${{$item->unit_price}}</span>
                                                                 </div>
                                                             </div>
                                                         </li>
-                                                        <li
-                                                            class="woocommerce-mini-cart-item d-flex align-items-center">
-                                                            <a href="#" class="remove remove_from_cart_button">×</a>
-                                                            <div class="mini-cart-img">
-                                                                <img src="{{asset('public/website/assets/img/products/cart_p02.jpg')}}"
-                                                                    alt="Product">
-                                                            </div>
-                                                            <div class="mini-cart-content">
-                                                                <h4 class="product-title"><a
-                                                                        href="shop-details.html">Branched Chain Amino
-                                                                        Acids</a></h4>
-                                                                <div class="mini-cart-price">2 ×
-                                                                    <span
-                                                                        class="woocommerce-Price-amount amount">$69</span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
+                                                        @endforeach
+
                                                     </ul>
                                                     <p class="woocommerce-mini-cart__total">
                                                         <strong>Subtotal:</strong>
-                                                        <span class="woocommerce-Price-amount">$149</span>
+                                                        <span
+                                                            class="woocommerce-Price-amount">${{$getCarts->sum('total')}}</span>
                                                     </p>
                                                     <p class="checkout-link">
-                                                        <a href="cart.html" class="button wc-forward">View cart</a>
-                                                        <a href="checkout.html"
+                                                        <a href="{{url('/cart')}}" class="button wc-forward">View
+                                                            cart</a>
+                                                        <a href="{{url('/checkout')}}"
                                                             class="button checkout wc-forward">Checkout</a>
                                                     </p>
                                                 </div>
-                                                @endauth
-                                                @guest
-                                                <a href="#"><i class="flaticon-search"></i></a>
-                                                @endguest
-
+                                                @endif
                                             </li>
+                                            @endauth
+                                            @guest
+                                            <li class="header-search">
+                                                <a href="#"><i class="flaticon-search"></i></a>
+                                            </li>
+                                            @endguest
                                             <li class="offCanvas-btn d-none d-xl-block"><a href="#"
                                                     class="navSidebar-button"><i class="flaticon-layout"></i></a>
                                             </li>
@@ -255,7 +272,7 @@
         <!-- main-area -->
         @yield('content')
         <!-- main-area-end -->
-
+        @include('website.pages.toastr')
         <!-- Footer-area -->
         <footer class="footer-area">
             <!-- <div class="footer-instagram">

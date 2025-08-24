@@ -281,7 +281,16 @@ Home
                                         <span class="total-rating">({{$item->reviews->count()}})</span>
                             </div>
                             <div class="shop-content-bottom">
-                                <a href="#" class="cart"><i class="flaticon-shopping-cart-1"></i></a>
+                                <a href="{{url('/add_to_cart')}}" class="cart"
+                                    onclick="event.preventDefault();
+                                                        document.getElementById('addToCart-form{{$item->id}}').submit();"><i
+                                        class="flaticon-shopping-cart-1"></i></a>
+                                <form id="addToCart-form{{$item->id}}" action="{{url('/add_to_cart')}}" method="POST"
+                                    class="d-none">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{$item->id}}">
+                                    <input type="hidden" name="quantity" value="1">
+                                </form>
                                 <a href="{{url('product-detail')}}/{{$item->product_id}}" class="btn btn-two">Buy
                                     Now</a>
                             </div>

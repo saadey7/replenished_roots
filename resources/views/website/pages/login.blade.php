@@ -49,14 +49,15 @@ Login
                         <div class="account__divider">
                             <span>or</span>
                         </div>
-                        <form action="#" class="account__form">
+                        <form action="{{url('process_login')}}" method="POST" class="account__form">
+                            @csrf
                             <div class="form-grp">
                                 <label for="email">Email</label>
-                                <input id="email" type="text" placeholder="email">
+                                <input id="email" type="text" name="email" placeholder="email">
                             </div>
                             <div class="form-grp">
                                 <label for="password">Password</label>
-                                <input id="password" type="text" placeholder="password">
+                                <input id="password" type="text" name="password" placeholder="password">
                             </div>
                             <div class="account__check">
                                 <div class="account__check-remember">
@@ -64,7 +65,7 @@ Login
                                     <label for="terms-check" class="form-check-label">Remember me</label>
                                 </div>
                                 <div class="account__check-forgot">
-                                    <a href="reset-password.html">Forgot Password?</a>
+                                    <a href="#">Forgot Password?</a>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-two btn-sm" style="border-radius: 5px;">Sign

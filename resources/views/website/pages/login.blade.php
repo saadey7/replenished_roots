@@ -65,7 +65,7 @@ Login
                                     <label for="terms-check" class="form-check-label">Remember me</label>
                                 </div>
                                 <div class="account__check-forgot">
-                                    <a href="#">Forgot Password?</a>
+                                    <a href="{{url('/reset-password')}}">Forgot Password?</a>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-two btn-sm" style="border-radius: 5px;">Sign

@@ -6,9 +6,13 @@ use Validator;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use App\Models\PasswordReset;
+use App\Models\EmailVerfication;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use App\Notifications\PasswordResetRequest;
+use App\Notifications\EmailVerificationRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class UserController extends Controller
@@ -95,6 +99,38 @@ class UserController extends Controller
         }
 
     }
+
+    public function resetPassword(){
+        return view('website.pages.reset-password');
+    }
+
+    public function forgot(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+        $user = User::where('email', $request->email)->first();
+        if (!$user)
+            return Redirect::back()->withErrors('We cannot find a user with that e-mail address');
+
+        $passwordReset = PasswordReset::updateOrCreate(
+            ['email' => $user->email],
+            [
+                'email' => $user->email,
+                'pin' => mt_rand(1000, 9999),
+            ]
+        );
+        if ($user && $passwordReset)
+            // $user->notify(
+            //     new PasswordResetRequest($passwordReset->token)
+            // );
+        // return view('website/auth/code', ['email'=>$user]);
+        return redirect()->back()->with('success', 'Request send successfully');
+    }
+
 
     public function logout()
     {

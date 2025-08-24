@@ -24,8 +24,10 @@ Home
                 </div>
             </div>
         </div>
-        <div class="video-shape one"><img src="assets/img/others/video_shape01.png" alt="shape"></div>
-        <div class="video-shape two"><img src="assets/img/others/video_shape02.png" alt="shape"></div>
+        <div class="video-shape one"><img src="{{asset('public/website/assets/img/others/video_shape01.png')}}"
+                alt="shape"></div>
+        <div class="video-shape two"><img src="{{asset('public/website/assets/img/others/video_shape02.png')}}"
+                alt="shape"></div>
     </section>
     <!-- breadcrumb-area-end -->
 
@@ -37,16 +39,17 @@ Home
                     <div class="singUp-wrap">
                         <h2 class="title">RESET PASSWORD</h2>
                         <p>Enter your email address to request password reset.</p>
-                        <form action="#" class="account__form">
+                        <form action="{{url('/forgot')}}" method="post" class="account__form">
+                            @csrf
                             <div class="form-grp">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" placeholder="email">
+                                <input type="email" id="email" name="email" placeholder="email">
                             </div>
                             <button type="submit" class="btn btn-two btn-sm m-0" style="border-radius: 5px;">Send
                                 Email</button>
                         </form>
                         <div class="account__switch">
-                            <p>Remember Password?<a href="login.html">Login</a></p>
+                            <p>Remember Password?<a href="{{url('/login')}}">Login</a></p>
                         </div>
                     </div>
                 </div>

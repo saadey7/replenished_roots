@@ -25,6 +25,8 @@ Route::get('/login', [UserController::class,'login'])->name('login');
 Route::post('/process_login', [UserController::class,'process_login']);
 Route::get('/register', [UserController::class,'register']);
 Route::post('/process_register', [UserController::class,'process_register']);
+Route::get('/reset-password', [UserController::class,'resetPassword']);
+Route::post('/forgot', [UserController::class,'forgot']);
 Route::post('/logout', [UserController::class,'logout']);
 
 Route::get('/', [WebsiteController::class,'index']);
